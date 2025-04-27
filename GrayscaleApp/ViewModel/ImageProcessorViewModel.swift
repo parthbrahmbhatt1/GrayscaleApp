@@ -11,6 +11,15 @@ import GrayscaleSDK
 
 final class ImageProcessorViewModel: ObservableObject {
     
+    @Published var selectedItem: PhotosPickerItem? {
+        didSet {
+            Task
+            {
+                await loadImageFromPicker()
+            }
+        }
+    }
+    
     @Published var processedImage: ProcessedImage?
     
     func setCapturedImage(_ image: UIImage) {
@@ -20,5 +29,17 @@ final class ImageProcessorViewModel: ObservableObject {
         }
         
         self.processedImage = ProcessedImage(original: image, grayscale: grayscale)
+    }
+    
+    private func loadImageFromPicker() async {
+        guard let item = selectedItem,
+              let data = try? await item.loadTransferable(type: Data.self),
+              let image = UIImage(data: data) else {
+            return
+        }
+        
+        await MainActor.run {
+            self.setCapturedImage(image)
+        }
     }
 }
