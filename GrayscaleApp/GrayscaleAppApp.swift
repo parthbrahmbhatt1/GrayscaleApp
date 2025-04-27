@@ -11,7 +11,7 @@ import SwiftUI
 struct GrayscaleAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SelectOrCaptureView()
         }
     }
 }
