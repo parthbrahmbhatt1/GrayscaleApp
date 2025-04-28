@@ -23,7 +23,7 @@ final class ImageProcessorViewModel: ObservableObject {
     @Published var processedImage: ProcessedImage?
     
     func setCapturedImage(_ image: UIImage) {
-        guard let grayscale = GrayscaleImageConverter.convertToGrayscale(image: image) else {
+        guard let grayscale = GrayscaleImageConverter.convertToGrayscale(image: image.normalized()) else {
             print("Grayscale conversion failed.")
             return
         }
